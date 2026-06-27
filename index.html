@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
 <title>Living Dex</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
 <meta name="description" content="Track your Pokémon living dex — every form, every shiny, every gender difference." />
 
 <link rel="manifest" href="manifest.json" />
@@ -15,13 +14,13 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
 <link rel="icon" href="icons/icon-192.png" />
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
 <div id="app">
 
-  <!-- ===== Header ===== -->
   <header class="app-header" id="appHeader">
     <div class="header-top">
       <h1 class="app-title">
@@ -48,7 +47,6 @@
     </div>
   </header>
 
-  <!-- ===== Menu panel (export/import/settings) ===== -->
   <div class="menu-overlay" id="menuOverlay" hidden>
     <div class="menu-panel" id="menuPanel" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="menu-panel-header">
@@ -104,7 +102,6 @@
     </div>
   </div>
 
-  <!-- ===== Controls: search + filter ===== -->
   <div class="controls-row">
     <div class="search-wrap">
       <i class="ti ti-search search-icon" aria-hidden="true"></i>
@@ -116,10 +113,8 @@
     </button>
   </div>
 
-  <!-- ===== Generation tabs ===== -->
   <nav class="gen-tabs" id="genTabs" aria-label="Generations"></nav>
 
-  <!-- ===== Pokemon grid ===== -->
   <main class="dex-grid" id="dexGrid" aria-live="polite"></main>
 
   <p class="empty-state" id="emptyState" hidden>
@@ -129,7 +124,6 @@
 
 </div>
 
-<!-- ===== Detail modal ===== -->
 <div class="modal-overlay" id="modalOverlay" hidden>
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="icon-btn modal-close" id="modalCloseBtn" aria-label="Close">
@@ -149,7 +143,6 @@
 
 <div class="toast" id="toast" hidden></div>
 
-<script src="pokemon_data.json" type="application/json" id="dataScriptFallback"></script>
 <script src="app.js"></script>
 </body>
 </html>
