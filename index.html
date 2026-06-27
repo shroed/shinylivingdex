@@ -11,33 +11,22 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap');
 
-:root {
-  --p:#C42B2B;--pd:#8E1F1F;--s:#FFD700;
-  --bg:#F5F0E8;--sur:#FFFFFF;--ink:#1A1A2E;
-  --soft:#6B6B7A;--acc:#FBEAEA;--line:rgba(26,26,46,0.12);
-  --sidebar-w:220px;
-}
+:root{--p:#C42B2B;--pd:#8E1F1F;--s:#FFD700;--bg:#F5F0E8;--sur:#FFFFFF;--ink:#1A1A2E;--soft:#6B6B7A;--acc:#FBEAEA;--line:rgba(26,26,46,0.12)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body{padding-bottom:env(safe-area-inset-bottom);transition:background .4s}
 button{font-family:inherit;cursor:pointer}
 input{font-family:inherit}
 
-.layout{display:flex;max-width:1100px;margin:0 auto;padding:0 16px 32px;gap:16px}
+.app{max-width:900px;margin:0 auto;padding:0 16px 32px}
 
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:30}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40}
 .sidebar-overlay.open{display:block}
-.sidebar{display:none;width:var(--sidebar-w);background:var(--bg);border-right:1px solid var(--line);padding:16px 0 20px;overflow-y:auto;flex-shrink:0;position:sticky;top:0;height:100vh;align-self:flex-start}
-.sidebar.open{display:block;position:fixed;left:0;top:0;bottom:0;height:100vh;z-index:31;transform:none;padding-top:calc(env(safe-area-inset-top)+16px)}
-@media(min-width:900px){
-  .sidebar{display:block}
-  .sidebar-overlay{display:none!important}
-  .sidebar-toggle{display:none!important}
-  .sidebar-close{display:none!important}
-}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;max-width:85vw;background:var(--bg);border-right:1px solid var(--line);padding:calc(env(safe-area-inset-top)+16px) 0 20px;overflow-y:auto;z-index:41;transform:translateX(-110%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:4px 0 24px rgba(0,0,0,.12)}
+.sidebar.open{transform:translateX(0)}
 .sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:0 14px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
 .sidebar-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);margin:0}
-.sidebar-close{display:flex;align-items:center;justify-content:center;width:28px;height:28px;background:transparent;border:none;color:var(--soft);padding:0}
+.sidebar-close{display:flex;align-items:center;justify-content:center;width:28px;height:28px;background:transparent;border:none;color:var(--soft);padding:0;cursor:pointer}
 .sidebar-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .gen-stat{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-radius:8px;margin:2px 8px;cursor:pointer;transition:background .15s}
 .gen-stat:hover,.gen-stat.active{background:var(--acc)}
@@ -50,18 +39,14 @@ input{font-family:inherit}
 .sidebar-total-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:600}
 .sidebar-total-val{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--ink);margin-top:2px}
 
-.main{flex:1;min-width:0}
-
-.app-header{position:sticky;top:0;z-index:20;background:var(--bg);padding:calc(env(safe-area-inset-top)+16px) 0 12px;transition:background .4s}
-.header-top{display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.sidebar-toggle{display:flex;align-items:center;justify-content:center;width:38px;height:38px;background:transparent;border:1px solid var(--line);border-radius:10px;color:var(--ink);flex-shrink:0}
-.sidebar-toggle svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.app-header{position:sticky;top:0;z-index:20;background:var(--bg);padding:calc(env(safe-area-inset-top)+12px) 0 10px;transition:background .4s}
+.header-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.icon-btn{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--line);border-radius:10px;color:var(--ink);flex-shrink:0;cursor:pointer}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn:active{transform:scale(.94)}
 .app-title{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;margin:0;color:var(--ink);flex:1}
 .title-ball{width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,var(--p) 0%,var(--p) 48%,var(--ink) 48%,var(--ink) 52%,#fff 52%,#fff 100%);border:2px solid var(--ink);position:relative;flex-shrink:0}
 .title-ball::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:#fff;border:1.5px solid var(--ink)}
-.icon-btn{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--line);border-radius:10px;color:var(--ink)}
-.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.icon-btn:active,.sidebar-toggle:active{transform:scale(.94)}
 .progress-row{display:flex;gap:10px;margin-bottom:10px}
 .progress-stat{flex:1;background:var(--sur);border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
 .progress-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:600}
@@ -70,7 +55,7 @@ input{font-family:inherit}
 .progress-bar-track{height:6px;border-radius:4px;background:var(--line);overflow:hidden}
 .progress-bar-fill{height:100%;background:var(--p);border-radius:4px;width:0%;transition:width .5s cubic-bezier(.4,0,.2,1)}
 
-.controls-row{display:flex;gap:8px;margin:16px 0 12px;flex-wrap:wrap}
+.controls-row{display:flex;gap:8px;margin:14px 0 10px;flex-wrap:wrap}
 .search-wrap{flex:1;min-width:180px;position:relative;display:flex;align-items:center}
 .search-icon{position:absolute;left:12px;pointer-events:none;color:var(--soft)}
 .search-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -81,43 +66,42 @@ input{font-family:inherit}
 .filter-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .filter-toggle[aria-pressed="true"]{background:var(--p);border-color:var(--p);color:#fff}
 
-.toggles-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.toggle-pill{display:flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--sur);color:var(--soft);font-size:12px;font-weight:600;white-space:nowrap;transition:all .15s}
+.toggles-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.toggle-pill{display:flex;align-items:center;gap:5px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--sur);color:var(--soft);font-size:12px;font-weight:600;white-space:nowrap;transition:all .15s;cursor:pointer}
 .toggle-pill svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .toggle-pill.on{background:var(--p);border-color:var(--p);color:#fff}
 
-.gen-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:14px;margin-bottom:6px;scrollbar-width:none}
+.gen-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;margin-bottom:6px;scrollbar-width:none}
 .gen-tabs::-webkit-scrollbar{display:none}
-.gen-tab{flex-shrink:0;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--sur);color:var(--soft);font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.gen-tab{flex-shrink:0;padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:var(--sur);color:var(--soft);font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace;white-space:nowrap;cursor:pointer}
 .gen-tab.active{background:var(--p);border-color:var(--p);color:#fff}
 
 .dex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
 .empty-state{text-align:center;padding:60px 20px;color:var(--soft);font-size:14px}
 .empty-state svg{display:block;margin:0 auto 10px;width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}
 
-.dex-card{background:var(--sur);border:1px solid var(--line);border-radius:14px;padding:8px 8px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;transition:transform .15s,border-color .2s;width:100%}
+.dex-card{background:var(--sur);border:1px solid var(--line);border-radius:14px;padding:8px 8px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;transition:transform .15s,border-color .2s;width:100%;cursor:pointer}
 .dex-card:active{transform:scale(.96)}
 .dex-card.complete{border-color:var(--p);background:var(--acc)}
 .dex-card-num{position:absolute;top:7px;left:9px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--soft);font-weight:500}
 .dex-card-name{font-size:12px;font-weight:500;color:var(--ink);margin:3px 0 5px;line-height:1.25}
 .dex-card-progress{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--soft);background:var(--bg);border-radius:999px;padding:2px 7px}
 .dex-card.complete .dex-card-progress{color:var(--pd);background:#fff}
-
 .dex-card-sprites{display:flex;gap:4px;margin:18px 0 2px;align-items:center;justify-content:center}
 .sprite-slot{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
-.sprite-slot img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated;transition:opacity .2s}
+.sprite-slot img{width:52px;height:52px;object-fit:contain;image-rendering:pixelated}
 .sprite-slot img.uncaught{filter:brightness(0) opacity(.14)}
 .sprite-slot-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--soft)}
 .sprite-divider{width:1px;height:40px;background:var(--line);flex-shrink:0}
 
 .menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:50;display:flex;justify-content:flex-end}
-.menu-panel{width:min(340px,86vw);height:100%;background:var(--bg);padding:calc(env(safe-area-inset-top)+20px) 20px 20px;overflow-y:auto;animation:slideIn .25s cubic-bezier(.4,0,.2,1)}
+.menu-panel{width:min(320px,86vw);height:100%;background:var(--bg);padding:calc(env(safe-area-inset-top)+20px) 20px 20px;overflow-y:auto;animation:slideIn .25s cubic-bezier(.4,0,.2,1)}
 @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
 .menu-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .menu-panel-header h2{font-family:'Space Grotesk',sans-serif;font-size:18px;margin:0}
 .menu-section{margin-bottom:24px}
 .menu-section-title{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);font-weight:600;margin:0 0 10px}
-.menu-action{width:100%;display:flex;align-items:center;gap:12px;background:var(--sur);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;text-align:left;color:var(--ink)}
+.menu-action{width:100%;display:flex;align-items:center;gap:12px;background:var(--sur);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;text-align:left;color:var(--ink);cursor:pointer}
 .menu-action svg{width:18px;height:18px;stroke:var(--p);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .menu-action-text{display:flex;flex-direction:column;gap:1px}
 .menu-action-text span:first-child{font-size:14px;font-weight:500}
@@ -148,634 +132,4 @@ input{font-family:inherit}
 .modal-progress{font-size:12px;color:var(--soft);font-family:'JetBrains Mono',monospace}
 .modal-forms{display:flex;flex-direction:column;gap:8px}
 .form-row{display:flex;align-items:center;gap:12px;background:var(--sur);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.form-row-info{flex:1;min-width:0}
-.form-row-label{font-size:13.5px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.form-row-tags{display:flex;gap:4px;margin-top:2px}
-.form-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--soft);background:var(--bg);border-radius:5px;padding:1px 5px}
-.form-row-checks{display:flex;gap:6px;flex-shrink:0}
-.check-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:52px;padding:6px 0;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--soft)}
-.check-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.check-btn span{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
-.check-btn.active{border-color:var(--p);background:var(--acc);color:var(--pd)}
-.check-btn.active.shiny-btn{border-color:var(--s);background:#FFF9DB;color:#8A6D00}
-.check-btn.active.shiny-btn svg{fill:var(--s);stroke:var(--s)}
-.check-btn:active{transform:scale(.92)}
-.gender-pair{display:flex;gap:4px}
-
-.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom)+20px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:10px 18px;border-radius:999px;z-index:100;white-space:nowrap}
-
-body[data-gen="1"]{--p:#CC1F1F;--pd:#8E1212;--bg:#EFEEEA;--sur:#FFF;--acc:#FBEAEA}
-body[data-gen="2"]{--p:#B8860B;--pd:#7A5A05;--bg:#F2EEE2;--sur:#FFFDF7;--acc:#F7EFD6}
-body[data-gen="3"]{--p:#1E7A4C;--pd:#145533;--bg:#EAF3EC;--sur:#FFF;--acc:#DFF0E4}
-body[data-gen="4"]{--p:#5B4FA0;--pd:#3D3470;--bg:#EDEBF5;--sur:#FFF;--acc:#E3E0F2}
-body[data-gen="5"]{--p:#2B2B2B;--pd:#000;--bg:#ECECEC;--sur:#FFF;--acc:#E4E4E4}
-body[data-gen="6"]{--p:#2563B0;--pd:#1A4576;--bg:#EAF0F7;--sur:#FFF;--acc:#DCE8F5}
-body[data-gen="7"]{--p:#E8862D;--pd:#A85C18;--bg:#FBF0E2;--sur:#FFF;--acc:#FAE3C4}
-body[data-gen="8"]{--p:#7A2E8C;--pd:#531E5E;--bg:#EFEAF1;--sur:#FFF;--acc:#E6DCEA}
-body[data-gen="9"]{--p:#A33A2E;--pd:#732820;--bg:#F2E8DD;--sur:#FFFCF7;--acc:#ECDACE}
-
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-button:focus-visible,input:focus-visible{outline:2px solid var(--p);outline-offset:2px}
-</style>
-</head>
-<body>
-
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <p class="sidebar-title">Progress</p>
-    <button class="sidebar-close" id="sidebarClose" aria-label="Close">
-      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <div id="genStats"></div>
-  <div class="sidebar-total">
-    <div class="sidebar-total-label">Total caught</div>
-    <div class="sidebar-total-val" id="sidebarTotal">—</div>
-    <div class="sidebar-total-label" style="margin-top:8px">Total shiny</div>
-    <div class="sidebar-total-val" id="sidebarShiny" style="color:var(--pd)">—</div>
-  </div>
-</div>
-
-<div class="layout">
-  <div class="main">
-    <header class="app-header">
-      <div class="header-top">
-        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Open stats">
-          <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-        <h1 class="app-title"><span class="title-ball"></span>Living Dex</h1>
-        <button class="icon-btn" id="menuBtn" aria-label="Open menu">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-        </button>
-      </div>
-      <div class="progress-row">
-        <div class="progress-stat">
-          <span class="progress-stat-label">Caught</span>
-          <span class="progress-stat-value" id="caughtStat">—</span>
-        </div>
-        <div class="progress-stat progress-stat-shiny">
-          <span class="progress-stat-label">Shiny</span>
-          <span class="progress-stat-value" id="shinyStat">—</span>
-        </div>
-      </div>
-      <div class="progress-bar-track" id="progressBar">
-        <div class="progress-bar-fill" id="progressBarFill"></div>
-      </div>
-    </header>
-
-    <div class="controls-row">
-      <div class="search-wrap">
-        <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-        <input type="search" id="searchInput" placeholder="Search by name or number" autocomplete="off" />
-      </div>
-      <button class="filter-toggle" id="filterToggle" aria-pressed="false">
-        <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        <span>Missing only</span>
-      </button>
-    </div>
-
-    <div class="toggles-row">
-      <button class="toggle-pill on" id="toggleShiny">
-        <svg viewBox="0 0 24 24"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5Z" fill="currentColor" stroke="none"/></svg>
-        Shiny
-      </button>
-      <button class="toggle-pill on" id="toggleGender">
-        <svg viewBox="0 0 24 24"><circle cx="10" cy="14" r="4"/><line x1="17" y1="7" x2="12.5" y2="11.5"/><polyline points="14 7 17 7 17 10"/></svg>
-        Gender diff
-      </button>
-      <button class="toggle-pill on" id="toggleForms">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Form diff
-      </button>
-    </div>
-
-    <nav class="gen-tabs" id="genTabs"></nav>
-    <main class="dex-grid" id="dexGrid"></main>
-    <p class="empty-state" id="emptyState" style="display:none">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-      No Pokémon match your search.
-    </p>
-  </div>
-</div>
-
-<div class="menu-overlay" id="menuOverlay" style="display:none">
-  <div class="menu-panel">
-    <div class="menu-panel-header">
-      <h2>Menu</h2>
-      <button class="icon-btn" id="closeMenuBtn" aria-label="Close">
-        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="menu-section">
-      <h3 class="menu-section-title">Backup</h3>
-      <button class="menu-action" id="exportBtn">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <div class="menu-action-text"><span>Export data</span><span class="menu-action-sub">Save your progress as a file</span></div>
-      </button>
-      <button class="menu-action" id="importBtn">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <div class="menu-action-text"><span>Import data</span><span class="menu-action-sub">Restore progress from a file</span></div>
-      </button>
-      <input type="file" id="importFile" accept="application/json" style="display:none" />
-    </div>
-    <div class="menu-section">
-      <h3 class="menu-section-title">Display</h3>
-      <label class="menu-toggle">
-        <span>Show battle-only forms</span>
-        <input type="checkbox" id="battleOnlyToggle" />
-        <span class="toggle-track"></span>
-      </label>
-      <label class="menu-toggle">
-        <span>Generation theming</span>
-        <input type="checkbox" id="themingToggle" checked />
-        <span class="toggle-track"></span>
-      </label>
-    </div>
-    <div class="menu-section">
-      <h3 class="menu-section-title">Danger zone</h3>
-      <button class="menu-action menu-action-danger" id="resetBtn">
-        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-        <div class="menu-action-text"><span>Reset all progress</span><span class="menu-action-sub">This cannot be undone</span></div>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay" style="display:none">
-  <div class="modal">
-    <button class="icon-btn modal-close" id="modalCloseBtn" aria-label="Close">
-      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-    <div class="modal-header">
-      <div class="modal-sprites" id="modalSprites"></div>
-      <div>
-        <span class="modal-dexnum" id="modalDexNum"></span>
-        <h2 class="modal-title" id="modalTitle"></h2>
-        <span class="modal-progress" id="modalProgress"></span>
-      </div>
-    </div>
-    <div class="modal-forms" id="modalForms"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast" style="display:none"></div>
-
-<script>
-(() => {
-  'use strict';
-
-  const STORAGE_KEY = 'livingdex.progress.v1';
-  const SETTINGS_KEY = 'livingdex.settings.v2';
-  const SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
-
-  let DATA = null;
-  let progress = {};
-  let settings = { showBattleOnly: false, theming: true };
-  let state = {
-    activeGen: 'all',
-    search: '',
-    missingOnly: false,
-    showShiny: true,
-    showGender: true,
-    showForms: true,
-  };
-
-  function loadProgress() {
-    try { progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { progress = {}; }
-  }
-  function saveProgress() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch(e) { showToast('Could not save'); }
-  }
-  function loadSettings() {
-    try {
-      const r = localStorage.getItem(SETTINGS_KEY);
-      if (r) {
-        const s = JSON.parse(r);
-        settings = {...settings, ...s.settings};
-        if (s.state) state = {...state, ...s.state};
-      }
-    } catch(e) {}
-  }
-  function saveSettings() {
-    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({settings, state:{showShiny:state.showShiny,showGender:state.showGender,showForms:state.showForms}})); } catch(e) {}
-  }
-  function getP(k) {
-    return progress[k] || {caught:false,shiny:false,maleCaught:false,femaleCaught:false,maleShiny:false,femaleShiny:false};
-  }
-  function setP(k, patch) { progress[k] = {...getP(k), ...patch}; saveProgress(); }
-
-  async function loadData() {
-    const r = await fetch('pokemon_data.json');
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    DATA = await r.json();
-  }
-
-  function visibleForms(sp) {
-    let forms = sp.f.filter(f => settings.showBattleOnly || !f.b);
-    if (!state.showForms) forms = forms.filter(f => f.d);
-    return forms.length ? forms : [sp.f[0]];
-  }
-
-  function useGender(form) { return form.g && state.showGender; }
-
-  function formCaught(f) {
-    const p = getP(f.k);
-    return useGender(f) ? (p.maleCaught?1:0)+(p.femaleCaught?1:0) : p.caught?1:0;
-  }
-  function formShiny(f) {
-    const p = getP(f.k);
-    return useGender(f) ? (p.maleShiny?1:0)+(p.femaleShiny?1:0) : p.shiny?1:0;
-  }
-  function formSlots(f) { return useGender(f)?2:1; }
-  function formShinySlots(f) { return state.showShiny ? formSlots(f) : 0; }
-
-  function speciesProgress(sp) {
-    const forms = visibleForms(sp);
-    let caught=0, shiny=0, total=0, shinyTotal=0;
-    for (const f of forms) {
-      total += formSlots(f);
-      shinyTotal += formShinySlots(f);
-      caught += formCaught(f);
-      shiny += formShiny(f);
-    }
-    return {caught, shiny, total, shinyTotal};
-  }
-
-  function isFullyCaught(f) {
-    const p = getP(f.k);
-    if (useGender(f)) return p.maleCaught && p.femaleCaught;
-    return p.caught;
-  }
-  function isFullyShiny(f) {
-    if (!state.showShiny) return true;
-    const p = getP(f.k);
-    if (useGender(f)) return p.maleShiny && p.femaleShiny;
-    return p.shiny;
-  }
-  function isMissing(sp) {
-    return !visibleForms(sp).every(f => isFullyCaught(f) && isFullyShiny(f));
-  }
-
-  function isDefaultCaught(sp) { const f=sp.f[0]; const p=getP(f.k); return useGender(f)?p.maleCaught||p.femaleCaught:p.caught; }
-  function isDefaultShiny(sp) { const f=sp.f[0]; const p=getP(f.k); return useGender(f)?p.maleShiny||p.femaleShiny:p.shiny; }
-
-  function applySprite(img, form, shiny) {
-    const sh = shiny ? 'shiny/' : '';
-    const list = [
-      `${SPRITE_BASE}/${sh}${form.s}.png`,
-      form.s !== form.v ? `${SPRITE_BASE}/${sh}${form.v}.png` : null,
-      `${SPRITE_BASE}/other/home/${sh}${form.v}.png`,
-      `${SPRITE_BASE}/other/official-artwork/${form.v}.png`,
-    ].filter(Boolean);
-    let i = 0;
-    function next() { if(i>=list.length){img.style.opacity='.1';return;} img.src=list[i++]; }
-    img.onerror = next; img.style.opacity=''; next();
-  }
-
-  const IC = {
-    check:'<polyline points="20 6 9 17 4 12"/>',
-    sparkles:'<path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5Z" fill="currentColor" stroke="none"/>',
-    mars:'<circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="14.14" y2="9.86"/><polyline points="15 5 19 5 19 9"/>',
-    venus:'<circle cx="12" cy="10" r="6"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="9" y1="19" x2="15" y2="19"/>',
-  };
-  function ic(name){return `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[name]||''}</svg>`;}
-
-  function globalTotals() {
-    let caught=0,shiny=0,total=0,shinyTotal=0;
-    for(const sp of DATA.species){const p=speciesProgress(sp);caught+=p.caught;shiny+=p.shiny;total+=p.total;shinyTotal+=p.shinyTotal;}
-    return {caught,shiny,total,shinyTotal};
-  }
-
-  function renderSidebar() {
-    const container = document.getElementById('genStats');
-    container.innerHTML = '';
-    const g = globalTotals();
-    document.getElementById('sidebarTotal').textContent = `${g.caught} / ${g.total}`;
-    document.getElementById('sidebarShiny').textContent = state.showShiny ? `${g.shiny} / ${g.shinyTotal}` : '—';
-
-    const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX'];
-    for (const gen of DATA.generations) {
-      const genSp = DATA.species.filter(s => s.gen === gen.id);
-      let caught=0, total=0;
-      for (const sp of genSp) { const p=speciesProgress(sp); caught+=p.caught; total+=p.total; }
-      const pct = total ? Math.round(caught/total*100) : 0;
-
-      const div = document.createElement('div');
-      div.innerHTML = `
-        <div class="gen-stat${state.activeGen===gen.id?' active':''}" data-gen="${gen.id}">
-          <span class="gen-stat-label">Gen ${ROMAN[gen.id-1]||gen.id}</span>
-          <span class="gen-stat-nums">${caught}/${total}</span>
-        </div>
-        <div class="gen-stat-bar"><div class="gen-stat-bar-fill" style="width:${pct}%"></div></div>
-      `;
-      div.querySelector('.gen-stat').onclick = () => {
-        state.activeGen = gen.id;
-        applyTheme();
-        render();
-        if (window.innerWidth < 900) closeSidebar();
-      };
-      container.appendChild(div);
-    }
-  }
-
-  function openSidebar() {
-    document.getElementById('sidebar').classList.add('open');
-    document.getElementById('sidebarOverlay').classList.add('open');
-  }
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('open');
-  }
-
-  function renderProgress() {
-    const g = globalTotals();
-    document.getElementById('caughtStat').textContent = `${g.caught} / ${g.total}`;
-    document.getElementById('shinyStat').textContent = state.showShiny ? `${g.shiny} / ${g.shinyTotal}` : '—';
-    const pct = g.total ? Math.round(g.caught/g.total*100) : 0;
-    document.getElementById('progressBarFill').style.width = pct+'%';
-  }
-
-  const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX'];
-  function renderGenTabs() {
-    const nav = document.getElementById('genTabs');
-    nav.innerHTML = '';
-    const mk = (lbl, val, title) => {
-      const b = document.createElement('button');
-      b.className = 'gen-tab'+(state.activeGen===val?' active':'');
-      b.textContent = lbl; if(title) b.title=title;
-      b.onclick = () => { state.activeGen=val; applyTheme(); render(); };
-      return b;
-    };
-    nav.appendChild(mk('All','all'));
-    for (const g of DATA.generations) nav.appendChild(mk(ROMAN[g.id-1]||g.id, g.id, g.name));
-  }
-
-  function applyTheme() {
-    if (!settings.theming || state.activeGen==='all') document.body.removeAttribute('data-gen');
-    else document.body.setAttribute('data-gen', String(state.activeGen));
-  }
-
-  function filtered() {
-    let list = DATA.species;
-    if (state.activeGen!=='all') list=list.filter(s=>s.gen===state.activeGen);
-    const q=state.search.trim().toLowerCase();
-    if (q) { const n=parseInt(q,10); list=list.filter(s=>(!isNaN(n)&&s.n===n)||s.nm.toLowerCase().includes(q)); }
-    if (state.missingOnly) list=list.filter(isMissing);
-    return list;
-  }
-
-  function renderGrid() {
-    const grid=document.getElementById('dexGrid'),empty=document.getElementById('emptyState'),list=filtered();
-    grid.innerHTML='';
-    empty.style.display=list.length?'none':'';
-    if(!list.length) return;
-    const frag=document.createDocumentFragment();
-    for(const sp of list) frag.appendChild(buildCard(sp));
-    grid.appendChild(frag);
-  }
-
-  function buildCard(sp) {
-    const p = speciesProgress(sp);
-    const complete = p.total>0 && p.caught===p.total && (!state.showShiny||p.shiny===p.shinyTotal);
-    const defForm = sp.f[0];
-    const caughtDefault = isDefaultCaught(sp);
-    const shinyDefault = isDefaultShiny(sp);
-
-    const card = document.createElement('button');
-    card.className = 'dex-card'+(complete?' complete':'');
-
-    const num = document.createElement('span');
-    num.className='dex-card-num';
-    num.textContent='#'+String(sp.n).padStart(4,'0');
-    card.appendChild(num);
-
-    const sprites = document.createElement('div');
-    sprites.className = 'dex-card-sprites';
-
-    const normalSlot = document.createElement('div');
-    normalSlot.className = 'sprite-slot';
-    const normalImg = document.createElement('img');
-    normalImg.alt=''; normalImg.loading='lazy';
-    normalImg.className = caughtDefault ? '' : 'uncaught';
-    applySprite(normalImg, defForm, false);
-    const normalLbl = document.createElement('span');
-    normalLbl.className='sprite-slot-label'; normalLbl.textContent='Normal';
-    normalSlot.appendChild(normalImg); normalSlot.appendChild(normalLbl);
-    sprites.appendChild(normalSlot);
-
-    if (state.showShiny) {
-      const divider = document.createElement('div'); divider.className='sprite-divider'; sprites.appendChild(divider);
-      const shinySlot = document.createElement('div');
-      shinySlot.className = 'sprite-slot';
-      const shinyImg = document.createElement('img');
-      shinyImg.alt=''; shinyImg.loading='lazy';
-      shinyImg.className = shinyDefault ? '' : 'uncaught';
-      applySprite(shinyImg, defForm, true);
-      const shinyLbl = document.createElement('span');
-      shinyLbl.className='sprite-slot-label'; shinyLbl.textContent='Shiny';
-      shinySlot.appendChild(shinyImg); shinySlot.appendChild(shinyLbl);
-      sprites.appendChild(shinySlot);
-    }
-
-    card.appendChild(sprites);
-
-    const name=document.createElement('span'); name.className='dex-card-name'; name.textContent=sp.nm; card.appendChild(name);
-    const prog=document.createElement('span'); prog.className='dex-card-progress';
-    const parts = [`${p.caught}/${p.total}`];
-    if (state.showShiny) parts.push(`✦${p.shiny}/${p.shinyTotal}`);
-    prog.textContent=parts.join(' · ');
-    card.appendChild(prog);
-
-    card.onclick=()=>openModal(sp);
-    return card;
-  }
-
-  let currentSp = null;
-
-  function openModal(sp) {
-    currentSp = sp;
-    document.getElementById('modalDexNum').textContent='#'+String(sp.n).padStart(4,'0');
-    document.getElementById('modalTitle').textContent=sp.nm;
-    renderModalSprites(sp.f[0]);
-    renderForms();
-    document.getElementById('modalOverlay').style.display='flex';
-    document.body.style.overflow='hidden';
-  }
-
-  function renderModalSprites(form) {
-    const c = document.getElementById('modalSprites');
-    c.innerHTML='';
-    const caughtDefault = isDefaultCaught(currentSp);
-    const shinyDefault = isDefaultShiny(currentSp);
-
-    const mkSlot = (shiny, caught) => {
-      const slot=document.createElement('div'); slot.className='modal-sprite-slot';
-      const img=document.createElement('img'); img.alt='';
-      img.className = caught?'':'uncaught';
-      applySprite(img, form, shiny);
-      const lbl=document.createElement('span'); lbl.className='modal-sprite-label'; lbl.textContent=shiny?'Shiny':'Normal';
-      slot.appendChild(img); slot.appendChild(lbl);
-      return slot;
-    };
-
-    c.appendChild(mkSlot(false, caughtDefault));
-    if (state.showShiny) c.appendChild(mkSlot(true, shinyDefault));
-  }
-
-  function closeModal() {
-    document.getElementById('modalOverlay').style.display='none';
-    document.body.style.overflow='';
-    currentSp=null;
-    renderGrid(); renderProgress(); renderSidebar();
-  }
-
-  function renderForms() {
-    if (!currentSp) return;
-    const c=document.getElementById('modalForms'); c.innerHTML='';
-    const forms=visibleForms(currentSp), p=speciesProgress(currentSp);
-    document.getElementById('modalProgress').textContent=
-      `${p.caught}/${p.total} caught`+(state.showShiny?` · ✦${p.shiny}/${p.shinyTotal} shiny`:'');
-    for(const f of forms) c.appendChild(buildFormRow(f));
-  }
-
-  function buildFormRow(f) {
-    const row=document.createElement('div'); row.className='form-row';
-    const info=document.createElement('div'); info.className='form-row-info';
-    const lbl=document.createElement('div'); lbl.className='form-row-label'; lbl.textContent=f.l; info.appendChild(lbl);
-    const tags=document.createElement('div'); tags.className='form-row-tags';
-    if(f.m) tags.appendChild(mkTag('Mega'));
-    if(f.b) tags.appendChild(mkTag('Battle only'));
-    if(f.g) tags.appendChild(mkTag('Gender diff'));
-    if(tags.children.length) info.appendChild(tags);
-    row.appendChild(info);
-
-    const checks=document.createElement('div'); checks.className='form-row-checks';
-    const p=getP(f.k);
-
-    if (useGender(f)) {
-      const mg=document.createElement('div'); mg.className='gender-pair';
-      mg.appendChild(mkCheck('mars','Male',p.maleCaught,()=>tog(f.k,'maleCaught')));
-      if(state.showShiny) mg.appendChild(mkCheck('sparkles','M✦',p.maleShiny,()=>tog(f.k,'maleShiny'),true));
-      const fg=document.createElement('div'); fg.className='gender-pair';
-      fg.appendChild(mkCheck('venus','Female',p.femaleCaught,()=>tog(f.k,'femaleCaught')));
-      if(state.showShiny) fg.appendChild(mkCheck('sparkles','F✦',p.femaleShiny,()=>tog(f.k,'femaleShiny'),true));
-      checks.appendChild(mg); checks.appendChild(fg);
-    } else {
-      checks.appendChild(mkCheck('check','Caught',p.caught,()=>tog(f.k,'caught')));
-      if(state.showShiny) checks.appendChild(mkCheck('sparkles','Shiny',p.shiny,()=>tog(f.k,'shiny'),true));
-    }
-
-    row.appendChild(checks);
-    return row;
-  }
-
-  function mkTag(t){const e=document.createElement('span');e.className='form-tag';e.textContent=t;return e;}
-  function mkCheck(icon,lbl,active,fn,shiny){
-    const b=document.createElement('button');
-    b.className='check-btn'+(active?' active':'')+(shiny?' shiny-btn':'');
-    b.innerHTML=ic(icon)+`<span>${lbl}</span>`;
-    b.onclick=fn; return b;
-  }
-  function tog(k,field){ setP(k,{[field]:!getP(k)[field]}); renderForms(); renderProgress(); renderSidebar(); renderModalSprites(currentSp.f[0]); }
-
-  let toastT=null;
-  function showToast(msg){ const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>{el.style.display='none';},2400); }
-
-  function exportData(){
-    const blob=new Blob([JSON.stringify({app:'living-dex',version:2,exportedAt:new Date().toISOString(),progress,settings},null,2)],{type:'application/json'});
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-    a.download=`living-dex-${new Date().toISOString().slice(0,10)}.json`;
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    showToast('Backup downloaded');
-  }
-  function importData(file){
-    const r=new FileReader();
-    r.onload=()=>{
-      try{
-        const d=JSON.parse(r.result);
-        if(!d||typeof d.progress!=='object') throw new Error();
-        progress=d.progress;
-        if(d.settings){settings={...settings,...d.settings};applySettingsUI();}
-        saveProgress();saveSettings();applyTheme();render();showToast('Backup restored');
-      }catch(e){showToast('Could not read that file');}
-    };
-    r.readAsText(file);
-  }
-
-  function applySettingsUI(){
-    document.getElementById('battleOnlyToggle').checked=settings.showBattleOnly;
-    document.getElementById('themingToggle').checked=settings.theming;
-    document.getElementById('toggleShiny').classList.toggle('on',state.showShiny);
-    document.getElementById('toggleGender').classList.toggle('on',state.showGender);
-    document.getElementById('toggleForms').classList.toggle('on',state.showForms);
-  }
-
-  function wireEvents(){
-    document.getElementById('sidebarToggle').onclick=openSidebar;
-    document.getElementById('sidebarClose').onclick=closeSidebar;
-    document.getElementById('sidebarOverlay').onclick=closeSidebar;
-
-    document.getElementById('menuBtn').onclick=()=>{document.getElementById('menuOverlay').style.display='flex';};
-    document.getElementById('closeMenuBtn').onclick=()=>{document.getElementById('menuOverlay').style.display='none';};
-    document.getElementById('menuOverlay').onclick=(e)=>{if(e.target===document.getElementById('menuOverlay'))document.getElementById('menuOverlay').style.display='none';};
-
-    document.getElementById('modalCloseBtn').onclick=closeModal;
-    document.getElementById('modalOverlay').onclick=(e)=>{if(e.target===document.getElementById('modalOverlay'))closeModal();};
-
-    document.addEventListener('keydown',e=>{
-      if(e.key==='Escape'){
-        if(document.getElementById('modalOverlay').style.display!=='none') closeModal();
-        else if(document.getElementById('menuOverlay').style.display!=='none') document.getElementById('menuOverlay').style.display='none';
-        else closeSidebar();
-      }
-    });
-
-    let st=null;
-    document.getElementById('searchInput').oninput=(e)=>{
-      clearTimeout(st);const v=e.target.value;
-      st=setTimeout(()=>{state.search=v;renderGrid();},120);
-    };
-
-    document.getElementById('filterToggle').onclick=(e)=>{
-      state.missingOnly=!state.missingOnly;
-      e.currentTarget.setAttribute('aria-pressed',String(state.missingOnly));
-      renderGrid();
-    };
-
-    document.getElementById('toggleShiny').onclick=()=>{ state.showShiny=!state.showShiny; document.getElementById('toggleShiny').classList.toggle('on',state.showShiny); saveSettings(); render(); };
-    document.getElementById('toggleGender').onclick=()=>{ state.showGender=!state.showGender; document.getElementById('toggleGender').classList.toggle('on',state.showGender); saveSettings(); render(); };
-    document.getElementById('toggleForms').onclick=()=>{ state.showForms=!state.showForms; document.getElementById('toggleForms').classList.toggle('on',state.showForms); saveSettings(); render(); };
-
-    document.getElementById('exportBtn').onclick=exportData;
-    document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
-    document.getElementById('importFile').onchange=(e)=>{const f=e.target.files[0];if(f)importData(f);e.target.value='';};
-    document.getElementById('battleOnlyToggle').onchange=(e)=>{settings.showBattleOnly=e.target.checked;saveSettings();render();};
-    document.getElementById('themingToggle').onchange=(e)=>{settings.theming=e.target.checked;saveSettings();applyTheme();};
-    document.getElementById('resetBtn').onclick=()=>{
-      if(confirm('Reset all progress? This cannot be undone.')){
-        progress={};saveProgress();render();
-        document.getElementById('menuOverlay').style.display='none';
-        showToast('Progress reset');
-      }
-    };
-  }
-
-  function render(){ renderGenTabs(); renderGrid(); renderProgress(); renderSidebar(); }
-
-  async function init(){
-    loadProgress(); loadSettings(); applySettingsUI();
-    try{ await loadData(); }
-    catch(e){
-      document.getElementById('dexGrid').innerHTML='<p style="padding:40px;text-align:center;color:var(--soft)">Could not load Pokémon data. Check your connection and reload.</p>';
-      return;
-    }
-    wireEvents(); applyTheme(); render();
-  }
-
-  init();
-})();
-</script>
-</body>
-</html>
+.form-row-info{flex:1;min-widt
