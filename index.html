@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Living Dex</title>
+<meta name="description" content="Track your Pokémon living dex — every form, every shiny, every gender difference." />
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#C42B2B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Living Dex" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" href="icons/icon-192.png" />
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== Header ===== -->
+  <header class="app-header" id="appHeader">
+    <div class="header-top">
+      <h1 class="app-title">
+        <span class="title-ball" aria-hidden="true"></span>
+        Living Dex
+      </h1>
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="menuPanel">
+        <i class="ti ti-dots-vertical" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="progress-row">
+      <div class="progress-stat">
+        <span class="progress-stat-label">Caught</span>
+        <span class="progress-stat-value" id="caughtStat">0 / 0</span>
+      </div>
+      <div class="progress-stat progress-stat-shiny">
+        <span class="progress-stat-label">Shiny</span>
+        <span class="progress-stat-value" id="shinyStat">0 / 0</span>
+      </div>
+    </div>
+    <div class="progress-bar-track" role="progressbar" aria-label="Overall completion" aria-valuemin="0" aria-valuemax="100" id="progressBar">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
+    </div>
+  </header>
+
+  <!-- ===== Menu panel (export/import/settings) ===== -->
+  <div class="menu-overlay" id="menuOverlay" hidden>
+    <div class="menu-panel" id="menuPanel" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="menu-panel-header">
+        <h2>Menu</h2>
+        <button class="icon-btn" id="closeMenuBtn" aria-label="Close menu">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="menu-section">
+        <h3 class="menu-section-title">Backup</h3>
+        <button class="menu-action" id="exportBtn">
+          <i class="ti ti-download" aria-hidden="true"></i>
+          <div class="menu-action-text">
+            <span>Export data</span>
+            <span class="menu-action-sub">Save your progress as a file</span>
+          </div>
+        </button>
+        <button class="menu-action" id="importBtn">
+          <i class="ti ti-upload" aria-hidden="true"></i>
+          <div class="menu-action-text">
+            <span>Import data</span>
+            <span class="menu-action-sub">Restore progress from a file</span>
+          </div>
+        </button>
+        <input type="file" id="importFile" accept="application/json" hidden />
+      </div>
+
+      <div class="menu-section">
+        <h3 class="menu-section-title">Display</h3>
+        <label class="menu-toggle">
+          <span>Show battle-only forms</span>
+          <input type="checkbox" id="battleOnlyToggle" />
+          <span class="toggle-track" aria-hidden="true"></span>
+        </label>
+        <label class="menu-toggle">
+          <span>Generation theming</span>
+          <input type="checkbox" id="themingToggle" checked />
+          <span class="toggle-track" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="menu-section">
+        <h3 class="menu-section-title">Danger zone</h3>
+        <button class="menu-action menu-action-danger" id="resetBtn">
+          <i class="ti ti-trash" aria-hidden="true"></i>
+          <div class="menu-action-text">
+            <span>Reset all progress</span>
+            <span class="menu-action-sub">This cannot be undone</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Controls: search + filter ===== -->
+  <div class="controls-row">
+    <div class="search-wrap">
+      <i class="ti ti-search search-icon" aria-hidden="true"></i>
+      <input type="search" id="searchInput" placeholder="Search by name or number" aria-label="Search by name or number" autocomplete="off" />
+    </div>
+    <button class="filter-toggle" id="filterToggle" aria-pressed="false">
+      <i class="ti ti-filter" aria-hidden="true"></i>
+      <span>Missing only</span>
+    </button>
+  </div>
+
+  <!-- ===== Generation tabs ===== -->
+  <nav class="gen-tabs" id="genTabs" aria-label="Generations"></nav>
+
+  <!-- ===== Pokemon grid ===== -->
+  <main class="dex-grid" id="dexGrid" aria-live="polite"></main>
+
+  <p class="empty-state" id="emptyState" hidden>
+    <i class="ti ti-mood-empty" aria-hidden="true"></i>
+    No Pokémon match your search.
+  </p>
+
+</div>
+
+<!-- ===== Detail modal ===== -->
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="icon-btn modal-close" id="modalCloseBtn" aria-label="Close">
+      <i class="ti ti-x" aria-hidden="true"></i>
+    </button>
+    <div class="modal-header">
+      <img class="modal-sprite" id="modalSprite" alt="" />
+      <div>
+        <span class="modal-dexnum" id="modalDexNum"></span>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <span class="modal-progress" id="modalProgress"></span>
+      </div>
+    </div>
+    <div class="modal-forms" id="modalForms"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="pokemon_data.json" type="application/json" id="dataScriptFallback"></script>
+<script src="app.js"></script>
+</body>
+</html>
