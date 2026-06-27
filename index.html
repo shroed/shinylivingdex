@@ -1,3 +1,6 @@
+Hier is de kopieerbare tekst:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,4 +135,412 @@ input{font-family:inherit}
 .modal-progress{font-size:12px;color:var(--soft);font-family:'JetBrains Mono',monospace}
 .modal-forms{display:flex;flex-direction:column;gap:8px}
 .form-row{display:flex;align-items:center;gap:12px;background:var(--sur);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.form-row-info{flex:1;min-widt
+.form-row-info{flex:1;min-width:0}
+.form-row-label{font-size:13.5px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.form-row-tags{display:flex;gap:4px;margin-top:2px}
+.form-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--soft);background:var(--bg);border-radius:5px;padding:1px 5px}
+.form-row-checks{display:flex;gap:6px;flex-shrink:0}
+.check-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:52px;padding:6px 0;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--soft);cursor:pointer}
+.check-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.check-btn span{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.check-btn.active{border-color:var(--p);background:var(--acc);color:var(--pd)}
+.check-btn.active.shiny-btn{border-color:var(--s);background:#FFF9DB;color:#8A6D00}
+.check-btn.active.shiny-btn svg{fill:var(--s);stroke:var(--s)}
+.check-btn:active{transform:scale(.92)}
+.gender-pair{display:flex;gap:4px}
+
+.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom)+20px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:10px 18px;border-radius:999px;z-index:100;white-space:nowrap}
+
+body[data-gen="1"]{--p:#CC1F1F;--pd:#8E1212;--bg:#EFEEEA;--sur:#FFF;--acc:#FBEAEA}
+body[data-gen="2"]{--p:#B8860B;--pd:#7A5A05;--bg:#F2EEE2;--sur:#FFFDF7;--acc:#F7EFD6}
+body[data-gen="3"]{--p:#1E7A4C;--pd:#145533;--bg:#EAF3EC;--sur:#FFF;--acc:#DFF0E4}
+body[data-gen="4"]{--p:#5B4FA0;--pd:#3D3470;--bg:#EDEBF5;--sur:#FFF;--acc:#E3E0F2}
+body[data-gen="5"]{--p:#2B2B2B;--pd:#000;--bg:#ECECEC;--sur:#FFF;--acc:#E4E4E4}
+body[data-gen="6"]{--p:#2563B0;--pd:#1A4576;--bg:#EAF0F7;--sur:#FFF;--acc:#DCE8F5}
+body[data-gen="7"]{--p:#E8862D;--pd:#A85C18;--bg:#FBF0E2;--sur:#FFF;--acc:#FAE3C4}
+body[data-gen="8"]{--p:#7A2E8C;--pd:#531E5E;--bg:#EFEAF1;--sur:#FFF;--acc:#E6DCEA}
+body[data-gen="9"]{--p:#A33A2E;--pd:#732820;--bg:#F2E8DD;--sur:#FFFCF7;--acc:#ECDACE}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+button:focus-visible,input:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <p class="sidebar-title">Progress</p>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div id="genStats"></div>
+  <div class="sidebar-total">
+    <div class="sidebar-total-label">Total caught</div>
+    <div class="sidebar-total-val" id="sidebarTotal">—</div>
+    <div class="sidebar-total-label" style="margin-top:8px">Total shiny</div>
+    <div class="sidebar-total-val" id="sidebarShiny" style="color:var(--pd)">—</div>
+  </div>
+</div>
+
+<div class="app">
+  <header class="app-header">
+    <div class="header-top">
+      <button class="icon-btn" id="sidebarToggle" aria-label="Open stats">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 class="app-title"><span class="title-ball"></span>Living Dex</h1>
+      <button class="icon-btn" id="menuBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      </button>
+    </div>
+    <div class="progress-row">
+      <div class="progress-stat">
+        <span class="progress-stat-label">Caught</span>
+        <span class="progress-stat-value" id="caughtStat">—</span>
+      </div>
+      <div class="progress-stat progress-stat-shiny">
+        <span class="progress-stat-label">Shiny</span>
+        <span class="progress-stat-value" id="shinyStat">—</span>
+      </div>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressBarFill"></div>
+    </div>
+  </header>
+
+  <div class="controls-row">
+    <div class="search-wrap">
+      <span class="search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <input type="search" id="searchInput" placeholder="Search by name or number" autocomplete="off" />
+    </div>
+    <button class="filter-toggle" id="filterToggle" aria-pressed="false">
+      <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      <span>Missing only</span>
+    </button>
+  </div>
+
+  <div class="toggles-row">
+    <button class="toggle-pill on" id="toggleShiny">
+      <svg viewBox="0 0 24 24"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5Z" fill="currentColor" stroke="none"/></svg>
+      Shiny
+    </button>
+    <button class="toggle-pill on" id="toggleGender">
+      <svg viewBox="0 0 24 24"><circle cx="10" cy="14" r="4"/><line x1="17" y1="7" x2="12.5" y2="11.5"/><polyline points="14 7 17 7 17 10"/></svg>
+      Gender diff
+    </button>
+    <button class="toggle-pill on" id="toggleForms">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Form diff
+    </button>
+  </div>
+
+  <nav class="gen-tabs" id="genTabs"></nav>
+  <main class="dex-grid" id="dexGrid"></main>
+  <p class="empty-state" id="emptyState" style="display:none">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+    No Pokémon match your search.
+  </p>
+</div>
+
+<div class="menu-overlay" id="menuOverlay" style="display:none">
+  <div class="menu-panel">
+    <div class="menu-panel-header">
+      <h2>Menu</h2>
+      <button class="icon-btn" id="closeMenuBtn" aria-label="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="menu-section">
+      <h3 class="menu-section-title">Backup</h3>
+      <button class="menu-action" id="exportBtn">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <div class="menu-action-text"><span>Export data</span><span class="menu-action-sub">Save your progress as a file</span></div>
+      </button>
+      <button class="menu-action" id="importBtn">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <div class="menu-action-text"><span>Import data</span><span class="menu-action-sub">Restore progress from a file</span></div>
+      </button>
+      <input type="file" id="importFile" accept="application/json" style="display:none" />
+    </div>
+    <div class="menu-section">
+      <h3 class="menu-section-title">Display</h3>
+      <label class="menu-toggle">
+        <span>Show battle-only forms</span>
+        <input type="checkbox" id="battleOnlyToggle" />
+        <span class="toggle-track"></span>
+      </label>
+      <label class="menu-toggle">
+        <span>Generation theming</span>
+        <input type="checkbox" id="themingToggle" checked />
+        <span class="toggle-track"></span>
+      </label>
+    </div>
+    <div class="menu-section">
+      <h3 class="menu-section-title">Danger zone</h3>
+      <button class="menu-action menu-action-danger" id="resetBtn">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        <div class="menu-action-text"><span>Reset all progress</span><span class="menu-action-sub">This cannot be undone</span></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal">
+    <button class="icon-btn modal-close" id="modalCloseBtn" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-header">
+      <div class="modal-sprites" id="modalSprites"></div>
+      <div>
+        <span class="modal-dexnum" id="modalDexNum"></span>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <span class="modal-progress" id="modalProgress"></span>
+      </div>
+    </div>
+    <div class="modal-forms" id="modalForms"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" style="display:none"></div>
+
+<script>
+(() => {
+  'use strict';
+  const SK='livingdex.progress.v1',SET='livingdex.settings.v2';
+  const SB='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
+  let DATA=null,progress={},settings={showBattleOnly:false,theming:true};
+  let state={activeGen:'all',search:'',missingOnly:false,showShiny:true,showGender:true,showForms:true};
+
+  function loadP(){try{progress=JSON.parse(localStorage.getItem(SK)||'{}');}catch(e){progress={};}}
+  function saveP(){try{localStorage.setItem(SK,JSON.stringify(progress));}catch(e){toast('Could not save');}}
+  function loadS(){try{const r=localStorage.getItem(SET);if(r){const s=JSON.parse(r);settings={...settings,...s.settings};if(s.state)state={...state,...s.state};}}catch(e){}}
+  function saveS(){try{localStorage.setItem(SET,JSON.stringify({settings,state:{showShiny:state.showShiny,showGender:state.showGender,showForms:state.showForms}}));}catch(e){}}
+  function gp(k){return progress[k]||{caught:false,shiny:false,maleCaught:false,femaleCaught:false,maleShiny:false,femaleShiny:false};}
+  function sp(k,p){progress[k]={...gp(k),...p};saveP();}
+
+  async function loadData(){const r=await fetch('pokemon_data.json');if(!r.ok)throw new Error();DATA=await r.json();}
+
+  function vf(s){let f=s.f.filter(f=>settings.showBattleOnly||!f.b);if(!state.showForms)f=f.filter(f=>f.d);return f.length?f:[s.f[0]];}
+  function ug(f){return f.g&&state.showGender;}
+  function fc(f){const p=gp(f.k);return ug(f)?(p.maleCaught?1:0)+(p.femaleCaught?1:0):p.caught?1:0;}
+  function fs(f){const p=gp(f.k);return ug(f)?(p.maleShiny?1:0)+(p.femaleShiny?1:0):p.shiny?1:0;}
+  function fsl(f){return ug(f)?2:1;}
+  function fss(f){return state.showShiny?fsl(f):0;}
+  function sprog(s){const forms=vf(s);let c=0,sh=0,t=0,st=0;for(const f of forms){t+=fsl(f);st+=fss(f);c+=fc(f);sh+=fs(f);}return{caught:c,shiny:sh,total:t,shinyTotal:st};}
+  function ifc(f){const p=gp(f.k);return ug(f)?p.maleCaught&&p.femaleCaught:p.caught;}
+  function ifs(f){if(!state.showShiny)return true;const p=gp(f.k);return ug(f)?p.maleShiny&&p.femaleShiny:p.shiny;}
+  function miss(s){return!vf(s).every(f=>ifc(f)&&ifs(f));}
+  function dc(s){const f=s.f[0];const p=gp(f.k);return ug(f)?p.maleCaught||p.femaleCaught:p.caught;}
+  function ds(s){const f=s.f[0];const p=gp(f.k);return ug(f)?p.maleShiny||p.femaleShiny:p.shiny;}
+
+  function applySprite(img,form,shiny){
+    const sh=shiny?'shiny/':'';
+    const list=[`${SB}/${sh}${form.s}.png`,form.s!==form.v?`${SB}/${sh}${form.v}.png`:null,`${SB}/other/home/${sh}${form.v}.png`,`${SB}/other/official-artwork/${form.v}.png`].filter(Boolean);
+    let i=0;function next(){if(i>=list.length){img.style.opacity='.1';return;}img.src=list[i++];}
+    img.onerror=next;img.style.opacity='';next();
+  }
+
+  const IC={check:'<polyline points="20 6 9 17 4 12"/>',sparkles:'<path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5Z" fill="currentColor" stroke="none"/>',mars:'<circle cx="10" cy="14" r="5"/><line x1="19" y1="5" x2="14.14" y2="9.86"/><polyline points="15 5 19 5 19 9"/>',venus:'<circle cx="12" cy="10" r="6"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="9" y1="19" x2="15" y2="19"/>'};
+  function ic(n){return `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]||''}</svg>`;}
+
+  function gtotals(){let c=0,sh=0,t=0,st=0;for(const s of DATA.species){const p=sprog(s);c+=p.caught;sh+=p.shiny;t+=p.total;st+=p.shinyTotal;}return{caught:c,shiny:sh,total:t,shinyTotal:st};}
+  const ROM=['I','II','III','IV','V','VI','VII','VIII','IX'];
+
+  function renderSidebar(){
+    const el=document.getElementById('genStats');el.innerHTML='';
+    const g=gtotals();
+    document.getElementById('sidebarTotal').textContent=`${g.caught} / ${g.total}`;
+    document.getElementById('sidebarShiny').textContent=state.showShiny?`${g.shiny} / ${g.shinyTotal}`:'—';
+    for(const gen of DATA.generations){
+      const gs=DATA.species.filter(s=>s.gen===gen.id);
+      let c=0,t=0;for(const s of gs){const p=sprog(s);c+=p.caught;t+=p.total;}
+      const pct=t?Math.round(c/t*100):0;
+      const d=document.createElement('div');
+      d.innerHTML=`<div class="gen-stat${state.activeGen===gen.id?' active':''}" data-gen="${gen.id}"><span class="gen-stat-label">Gen ${ROM[gen.id-1]||gen.id}</span><span class="gen-stat-nums">${c}/${t}</span></div><div class="gen-stat-bar"><div class="gen-stat-bar-fill" style="width:${pct}%"></div></div>`;
+      d.querySelector('.gen-stat').onclick=()=>{state.activeGen=gen.id;applyTheme();render();closeSidebar();};
+      el.appendChild(d);
+    }
+  }
+
+  function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('open');}
+  function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');}
+
+  function renderProgress(){
+    const g=gtotals();
+    document.getElementById('caughtStat').textContent=`${g.caught} / ${g.total}`;
+    document.getElementById('shinyStat').textContent=state.showShiny?`${g.shiny} / ${g.shinyTotal}`:'—';
+    const pct=g.total?Math.round(g.caught/g.total*100):0;
+    document.getElementById('progressBarFill').style.width=pct+'%';
+  }
+
+  function renderGenTabs(){
+    const nav=document.getElementById('genTabs');nav.innerHTML='';
+    const mk=(l,v,t)=>{const b=document.createElement('button');b.className='gen-tab'+(state.activeGen===v?' active':'');b.textContent=l;if(t)b.title=t;b.onclick=()=>{state.activeGen=v;applyTheme();render();};return b;};
+    nav.appendChild(mk('All','all'));
+    for(const g of DATA.generations)nav.appendChild(mk(ROM[g.id-1]||g.id,g.id,g.name));
+  }
+
+  function applyTheme(){if(!settings.theming||state.activeGen==='all')document.body.removeAttribute('data-gen');else document.body.setAttribute('data-gen',String(state.activeGen));}
+
+  function filtered(){
+    let list=DATA.species;
+    if(state.activeGen!=='all')list=list.filter(s=>s.gen===state.activeGen);
+    const q=state.search.trim().toLowerCase();
+    if(q){const n=parseInt(q,10);list=list.filter(s=>(!isNaN(n)&&s.n===n)||s.nm.toLowerCase().includes(q));}
+    if(state.missingOnly)list=list.filter(miss);
+    return list;
+  }
+
+  function renderGrid(){
+    const grid=document.getElementById('dexGrid'),empty=document.getElementById('emptyState'),list=filtered();
+    grid.innerHTML='';empty.style.display=list.length?'none':'';
+    if(!list.length)return;
+    const frag=document.createDocumentFragment();
+    for(const s of list)frag.appendChild(buildCard(s));
+    grid.appendChild(frag);
+  }
+
+  function buildCard(s){
+    const p=sprog(s),complete=p.total>0&&p.caught===p.total&&(!state.showShiny||p.shiny===p.shinyTotal);
+    const card=document.createElement('button');
+    card.className='dex-card'+(complete?' complete':'');
+    const num=document.createElement('span');num.className='dex-card-num';num.textContent='#'+String(s.n).padStart(4,'0');card.appendChild(num);
+    const sprites=document.createElement('div');sprites.className='dex-card-sprites';
+    const mkSlot=(shiny,caught)=>{
+      const slot=document.createElement('div');slot.className='sprite-slot';
+      const img=document.createElement('img');img.alt='';img.loading='lazy';img.className=caught?'':'uncaught';
+      applySprite(img,s.f[0],shiny);
+      const lbl=document.createElement('span');lbl.className='sprite-slot-label';lbl.textContent=shiny?'Shiny':'Normal';
+      slot.appendChild(img);slot.appendChild(lbl);return slot;
+    };
+    sprites.appendChild(mkSlot(false,dc(s)));
+    if(state.showShiny){const div=document.createElement('div');div.className='sprite-divider';sprites.appendChild(div);sprites.appendChild(mkSlot(true,ds(s)));}
+    card.appendChild(sprites);
+    const name=document.createElement('span');name.className='dex-card-name';name.textContent=s.nm;card.appendChild(name);
+    const prog=document.createElement('span');prog.className='dex-card-progress';
+    prog.textContent=`${p.caught}/${p.total}`+(state.showShiny?` · ✦${p.shiny}/${p.shinyTotal}`:'');
+    card.appendChild(prog);
+    card.onclick=()=>openModal(s);return card;
+  }
+
+  let curSp=null;
+  function openModal(s){
+    curSp=s;
+    document.getElementById('modalDexNum').textContent='#'+String(s.n).padStart(4,'0');
+    document.getElementById('modalTitle').textContent=s.nm;
+    renderModalSprites();renderForms();
+    document.getElementById('modalOverlay').style.display='flex';
+    document.body.style.overflow='hidden';
+  }
+  function renderModalSprites(){
+    const c=document.getElementById('modalSprites');c.innerHTML='';
+    const mkSlot=(shiny,caught)=>{
+      const slot=document.createElement('div');slot.className='modal-sprite-slot';
+      const img=document.createElement('img');img.alt='';img.className=caught?'':'uncaught';
+      applySprite(img,curSp.f[0],shiny);
+      const lbl=document.createElement('span');lbl.className='modal-sprite-label';lbl.textContent=shiny?'Shiny':'Normal';
+      slot.appendChild(img);slot.appendChild(lbl);return slot;
+    };
+    c.appendChild(mkSlot(false,dc(curSp)));
+    if(state.showShiny)c.appendChild(mkSlot(true,ds(curSp)));
+  }
+  function closeModal(){
+    document.getElementById('modalOverlay').style.display='none';
+    document.body.style.overflow='';curSp=null;
+    renderGrid();renderProgress();renderSidebar();
+  }
+  function renderForms(){
+    if(!curSp)return;
+    const c=document.getElementById('modalForms');c.innerHTML='';
+    const forms=vf(curSp),p=sprog(curSp);
+    document.getElementById('modalProgress').textContent=`${p.caught}/${p.total} caught`+(state.showShiny?` · ✦${p.shiny}/${p.shinyTotal} shiny`:'');
+    for(const f of forms)c.appendChild(buildFormRow(f));
+  }
+  function buildFormRow(f){
+    const row=document.createElement('div');row.className='form-row';
+    const info=document.createElement('div');info.className='form-row-info';
+    const lbl=document.createElement('div');lbl.className='form-row-label';lbl.textContent=f.l;info.appendChild(lbl);
+    const tags=document.createElement('div');tags.className='form-row-tags';
+    if(f.m)tags.appendChild(mktag('Mega'));if(f.b)tags.appendChild(mktag('Battle only'));if(f.g)tags.appendChild(mktag('Gender diff'));
+    if(tags.children.length)info.appendChild(tags);row.appendChild(info);
+    const checks=document.createElement('div');checks.className='form-row-checks';
+    const p=gp(f.k);
+    if(ug(f)){
+      const mg=document.createElement('div');mg.className='gender-pair';
+      mg.appendChild(mkchk('mars','Male',p.maleCaught,()=>tog(f.k,'maleCaught')));
+      if(state.showShiny)mg.appendChild(mkchk('sparkles','M✦',p.maleShiny,()=>tog(f.k,'maleShiny'),true));
+      const fg=document.createElement('div');fg.className='gender-pair';
+      fg.appendChild(mkchk('venus','Female',p.femaleCaught,()=>tog(f.k,'femaleCaught')));
+      if(state.showShiny)fg.appendChild(mkchk('sparkles','F✦',p.femaleShiny,()=>tog(f.k,'femaleShiny'),true));
+      checks.appendChild(mg);checks.appendChild(fg);
+    }else{
+      checks.appendChild(mkchk('check','Caught',p.caught,()=>tog(f.k,'caught')));
+      if(state.showShiny)checks.appendChild(mkchk('sparkles','Shiny',p.shiny,()=>tog(f.k,'shiny'),true));
+    }
+    row.appendChild(checks);return row;
+  }
+  function mktag(t){const e=document.createElement('span');e.className='form-tag';e.textContent=t;return e;}
+  function mkchk(i,l,a,fn,s){const b=document.createElement('button');b.className='check-btn'+(a?' active':'')+(s?' shiny-btn':'');b.innerHTML=ic(i)+`<span>${l}</span>`;b.onclick=fn;return b;}
+  function tog(k,f){sp(k,{[f]:!gp(k)[f]});renderForms();renderProgress();renderSidebar();renderModalSprites();}
+
+  let tt=null;
+  function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(tt);tt=setTimeout(()=>{el.style.display='none';},2400);}
+
+  function exportData(){
+    const blob=new Blob([JSON.stringify({app:'living-dex',version:2,exportedAt:new Date().toISOString(),progress,settings},null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`living-dex-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Backup downloaded');
+  }
+  function importData(file){
+    const r=new FileReader();r.onload=()=>{
+      try{const d=JSON.parse(r.result);if(!d||typeof d.progress!=='object')throw new Error();progress=d.progress;if(d.settings){settings={...settings,...d.settings};applyUI();}saveP();saveS();applyTheme();render();toast('Backup restored');}
+      catch(e){toast('Could not read that file');}
+    };r.readAsText(file);
+  }
+  function applyUI(){
+    document.getElementById('battleOnlyToggle').checked=settings.showBattleOnly;
+    document.getElementById('themingToggle').checked=settings.theming;
+    document.getElementById('toggleShiny').classList.toggle('on',state.showShiny);
+    document.getElementById('toggleGender').classList.toggle('on',state.showGender);
+    document.getElementById('toggleForms').classList.toggle('on',state.showForms);
+  }
+
+  function wireEvents(){
+    document.getElementById('sidebarToggle').onclick=openSidebar;
+    document.getElementById('sidebarClose').onclick=closeSidebar;
+    document.getElementById('sidebarOverlay').onclick=closeSidebar;
+    document.getElementById('menuBtn').onclick=()=>{document.getElementById('menuOverlay').style.display='flex';};
+    document.getElementById('closeMenuBtn').onclick=()=>{document.getElementById('menuOverlay').style.display='none';};
+    document.getElementById('menuOverlay').onclick=(e)=>{if(e.target===document.getElementById('menuOverlay'))document.getElementById('menuOverlay').style.display='none';};
+    document.getElementById('modalCloseBtn').onclick=closeModal;
+    document.getElementById('modalOverlay').onclick=(e)=>{if(e.target===document.getElementById('modalOverlay'))closeModal();};
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('modalOverlay').style.display!=='none')closeModal();else if(document.getElementById('menuOverlay').style.display!=='none')document.getElementById('menuOverlay').style.display='none';else closeSidebar();}});
+    let st=null;
+    document.getElementById('searchInput').oninput=(e)=>{clearTimeout(st);const v=e.target.value;st=setTimeout(()=>{state.search=v;renderGrid();},120);};
+    document.getElementById('filterToggle').onclick=(e)=>{state.missingOnly=!state.missingOnly;e.currentTarget.setAttribute('aria-pressed',String(state.missingOnly));renderGrid();};
+    document.getElementById('toggleShiny').onclick=()=>{state.showShiny=!state.showShiny;document.getElementById('toggleShiny').classList.toggle('on',state.showShiny);saveS();render();};
+    document.getElementById('toggleGender').onclick=()=>{state.showGender=!state.showGender;document.getElementById('toggleGender').classList.toggle('on',state.showGender);saveS();render();};
+    document.getElementById('toggleForms').onclick=()=>{state.showForms=!state.showForms;document.getElementById('toggleForms').classList.toggle('on',state.showForms);saveS();render();};
+    document.getElementById('exportBtn').onclick=exportData;
+    document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+    document.getElementById('importFile').onchange=(e)=>{const f=e.target.files[0];if(f)importData(f);e.target.value='';};
+    document.getElementById('battleOnlyToggle').onchange=(e)=>{settings.showBattleOnly=e.target.checked;saveS();render();};
+    document.getElementById('themingToggle').onchange=(e)=>{settings.theming=e.target.checked;saveS();applyTheme();};
+    document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset all progress? This cannot be undone.')){progress={};saveP();render();document.getElementById('menuOverlay').style.display='none';toast('Progress reset');}};
+  }
+
+  function render(){renderGenTabs();renderGrid();renderProgress();renderSidebar();}
+
+  async function init(){
+    loadP();loadS();applyUI();
+    try{await loadData();}
+    catch(e){document.getElementById('dexGrid').innerHTML='<p style="padding:40px;text-align:center;color:var(--soft)">Could not load Pokémon data. Check your connection and reload.</p>';return;}
+    wireEvents();applyTheme();render();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
+```
