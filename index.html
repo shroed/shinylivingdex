@@ -23,22 +23,22 @@ body{padding-bottom:env(safe-area-inset-bottom);transition:background .4s}
 button{font-family:inherit;cursor:pointer}
 input{font-family:inherit}
 
-.layout{display:flex;max-width:1100px;margin:0 auto;padding:0 16px 32px;gap:16px;position:relative}
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:0 16px 32px;gap:16px}
 
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:30}
 .sidebar-overlay.open{display:block}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:var(--bg);border-right:1px solid var(--line);padding:calc(env(safe-area-inset-top)+16px) 0 20px;overflow-y:auto;z-index:31;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
-.sidebar.open{transform:translateX(0)}
+.sidebar{display:none;width:var(--sidebar-w);background:var(--bg);border-right:1px solid var(--line);padding:16px 0 20px;overflow-y:auto;flex-shrink:0;position:sticky;top:0;height:100vh;align-self:flex-start}
+.sidebar.open{display:block;position:fixed;left:0;top:0;bottom:0;height:100vh;z-index:31;transform:none;padding-top:calc(env(safe-area-inset-top)+16px)}
 @media(min-width:900px){
-  .sidebar{position:sticky;top:0;height:100vh;transform:none;border-right:1px solid var(--line);flex-shrink:0;width:var(--sidebar-w)}
+  .sidebar{display:block}
   .sidebar-overlay{display:none!important}
   .sidebar-toggle{display:none!important}
+  .sidebar-close{display:none!important}
 }
 .sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:0 14px 12px;border-bottom:1px solid var(--line);margin-bottom:8px}
 .sidebar-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft);margin:0}
 .sidebar-close{display:flex;align-items:center;justify-content:center;width:28px;height:28px;background:transparent;border:none;color:var(--soft);padding:0}
 .sidebar-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-@media(min-width:900px){.sidebar-close{display:none}}
 .gen-stat{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-radius:8px;margin:2px 8px;cursor:pointer;transition:background .15s}
 .gen-stat:hover,.gen-stat.active{background:var(--acc)}
 .gen-stat.active .gen-stat-label{color:var(--p);font-weight:600}
@@ -681,4 +681,101 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--p);outline-offs
   function tog(k,field){ setP(k,{[field]:!getP(k)[field]}); renderForms(); renderProgress(); renderSidebar(); renderModalSprites(currentSp.f[0]); }
 
   let toastT=null;
-  function showToast(msg){ const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';
+  function showToast(msg){ const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>{el.style.display='none';},2400); }
+
+  function exportData(){
+    const blob=new Blob([JSON.stringify({app:'living-dex',version:2,exportedAt:new Date().toISOString(),progress,settings},null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=`living-dex-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    showToast('Backup downloaded');
+  }
+  function importData(file){
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const d=JSON.parse(r.result);
+        if(!d||typeof d.progress!=='object') throw new Error();
+        progress=d.progress;
+        if(d.settings){settings={...settings,...d.settings};applySettingsUI();}
+        saveProgress();saveSettings();applyTheme();render();showToast('Backup restored');
+      }catch(e){showToast('Could not read that file');}
+    };
+    r.readAsText(file);
+  }
+
+  function applySettingsUI(){
+    document.getElementById('battleOnlyToggle').checked=settings.showBattleOnly;
+    document.getElementById('themingToggle').checked=settings.theming;
+    document.getElementById('toggleShiny').classList.toggle('on',state.showShiny);
+    document.getElementById('toggleGender').classList.toggle('on',state.showGender);
+    document.getElementById('toggleForms').classList.toggle('on',state.showForms);
+  }
+
+  function wireEvents(){
+    document.getElementById('sidebarToggle').onclick=openSidebar;
+    document.getElementById('sidebarClose').onclick=closeSidebar;
+    document.getElementById('sidebarOverlay').onclick=closeSidebar;
+
+    document.getElementById('menuBtn').onclick=()=>{document.getElementById('menuOverlay').style.display='flex';};
+    document.getElementById('closeMenuBtn').onclick=()=>{document.getElementById('menuOverlay').style.display='none';};
+    document.getElementById('menuOverlay').onclick=(e)=>{if(e.target===document.getElementById('menuOverlay'))document.getElementById('menuOverlay').style.display='none';};
+
+    document.getElementById('modalCloseBtn').onclick=closeModal;
+    document.getElementById('modalOverlay').onclick=(e)=>{if(e.target===document.getElementById('modalOverlay'))closeModal();};
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){
+        if(document.getElementById('modalOverlay').style.display!=='none') closeModal();
+        else if(document.getElementById('menuOverlay').style.display!=='none') document.getElementById('menuOverlay').style.display='none';
+        else closeSidebar();
+      }
+    });
+
+    let st=null;
+    document.getElementById('searchInput').oninput=(e)=>{
+      clearTimeout(st);const v=e.target.value;
+      st=setTimeout(()=>{state.search=v;renderGrid();},120);
+    };
+
+    document.getElementById('filterToggle').onclick=(e)=>{
+      state.missingOnly=!state.missingOnly;
+      e.currentTarget.setAttribute('aria-pressed',String(state.missingOnly));
+      renderGrid();
+    };
+
+    document.getElementById('toggleShiny').onclick=()=>{ state.showShiny=!state.showShiny; document.getElementById('toggleShiny').classList.toggle('on',state.showShiny); saveSettings(); render(); };
+    document.getElementById('toggleGender').onclick=()=>{ state.showGender=!state.showGender; document.getElementById('toggleGender').classList.toggle('on',state.showGender); saveSettings(); render(); };
+    document.getElementById('toggleForms').onclick=()=>{ state.showForms=!state.showForms; document.getElementById('toggleForms').classList.toggle('on',state.showForms); saveSettings(); render(); };
+
+    document.getElementById('exportBtn').onclick=exportData;
+    document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+    document.getElementById('importFile').onchange=(e)=>{const f=e.target.files[0];if(f)importData(f);e.target.value='';};
+    document.getElementById('battleOnlyToggle').onchange=(e)=>{settings.showBattleOnly=e.target.checked;saveSettings();render();};
+    document.getElementById('themingToggle').onchange=(e)=>{settings.theming=e.target.checked;saveSettings();applyTheme();};
+    document.getElementById('resetBtn').onclick=()=>{
+      if(confirm('Reset all progress? This cannot be undone.')){
+        progress={};saveProgress();render();
+        document.getElementById('menuOverlay').style.display='none';
+        showToast('Progress reset');
+      }
+    };
+  }
+
+  function render(){ renderGenTabs(); renderGrid(); renderProgress(); renderSidebar(); }
+
+  async function init(){
+    loadProgress(); loadSettings(); applySettingsUI();
+    try{ await loadData(); }
+    catch(e){
+      document.getElementById('dexGrid').innerHTML='<p style="padding:40px;text-align:center;color:var(--soft)">Could not load Pokémon data. Check your connection and reload.</p>';
+      return;
+    }
+    wireEvents(); applyTheme(); render();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
